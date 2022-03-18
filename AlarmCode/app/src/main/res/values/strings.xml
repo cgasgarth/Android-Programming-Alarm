@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Alarm</string>
+    <string-array name="times_array">
+        <item>5 Minutes</item>
+        <item>10 Minutes</item>
+        <item>15 Minutes</item>
+    </string-array>
 </resources>

@@ -7,14 +7,18 @@ import android.app.PendingIntent;
 import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -51,6 +55,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Calendar calendar = Calendar.getInstance();
         int hr = tp.getHour();
         int m = tp.getMinute();
+
+        TextView dateET = findViewById(R.id.editTextDate);
+        String[] date = String.valueOf(dateET.getText()).split("-");
+        if (date.length > 1) {
+            String month = date[0];
+            String day = date[1];
+            String year = date[2];
+            calendar.set(Calendar.MONTH, Integer.valueOf(date[0]));
+            calendar.set(Calendar.DAY_OF_MONTH, Integer.valueOf(date[1]));
+            calendar.set(calendar.YEAR, Integer.valueOf(date[2]));
+            Log.i("Month, day, year", month + day + year);
+        }
+
         Log.i("Hour and minuite", hr + ":" + m);
         calendar.set(Calendar.HOUR_OF_DAY,hr);
         calendar.set(Calendar.MINUTE,m);

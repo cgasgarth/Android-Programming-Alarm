@@ -12,7 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="date" />
+        android:gravity="center_horizontal"
+        android:hint="MM-DD-YYYY"
+        android:inputType="textPersonName" />
+
     <TimePicker
         android:id="@+id/timePicker1"
         android:layout_width="wrap_content"

@@ -19,11 +19,12 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
-
+    ArrayList<Alarm> alarms = new ArrayList<Alarm>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +86,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         long millTime = calendar.getTimeInMillis();
         Log.i("cal time", String.valueOf(millTime));
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
+        Alarm newAlarm = new Alarm();
+        newAlarm.milli = millTime;
+        newAlarm.pendingIntent = pendingIntent;
+        alarms.add(newAlarm);
+
         Log.d("===Sensing alarm===", "One time alert alarm has been created. This alarm will send to a broadcast sensing receiver.");
 
         Toast.makeText(this, "Sensing alert alarm has been created. This alarm will send to a broadcast start sensing receiver.", Toast.LENGTH_LONG).show();
@@ -93,4 +100,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
     }
+}
+
+class Alarm{
+    PendingIntent pendingIntent;
+    long milli;
+
+    PendingIntent getPendingIntent(){ return this.pendingIntent; }
+    long getMilli(){ return this.milli;}
 }

@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // parent.getItemAtPosition(pos)
          String item = (String) parent.getItemAtPosition(pos);
          Log.i("item selected is", item);
-
     }
 
     public void newAlarm(View view){
@@ -66,14 +65,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         //Generating object of alarmManager using getSystemService method. Here ALARM_SERVICE is used to receive alarm manager with intent at a time.
         AlarmManager alarmManager=(AlarmManager)getSystemService(ALARM_SERVICE);
-
+        long millTime = calendar.getTimeInMillis();
+        Log.i("cal time", String.valueOf(millTime));
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         Log.d("===Sensing alarm===", "One time alert alarm has been created. This alarm will send to a broadcast sensing receiver.");
 
         Toast.makeText(this, "Sensing alert alarm has been created. This alarm will send to a broadcast start sensing receiver.", Toast.LENGTH_LONG).show();
-
-
-
     }
 
     public void onNothingSelected(AdapterView<?> parent) {

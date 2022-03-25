@@ -29,7 +29,7 @@ public class sendNotification extends BroadcastReceiver {
         //create an instance of NotificationManager, call getSystemService(), passing in the NOTIFICATION_SERVICE constant.
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context. NOTIFICATION_SERVICE ) ;
 
-        Notification notification = getNotification(context,"Time to exercise!!") ; // change the message
+        Notification notification = getNotification(context,"This is in Alarm") ; // change the message
 
         //the device running the app has Android SDK 26 or up
         if (android.os.Build.VERSION. SDK_INT >= android.os.Build.VERSION_CODES. O ) {

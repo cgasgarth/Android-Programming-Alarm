@@ -91,6 +91,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         int hr = tp.getHour();
         int m = tp.getMinute();
 
+        EditText alarmNameET = findViewById(R.id.alarmName);
+        String name = String.valueOf(alarmNameET.getText());
+        if (name == ""){ name = "alert"; }
+
         TextView dateET = findViewById(R.id.editTextDate);
         String[] date = String.valueOf(dateET.getText()).split("-");
         if (date.length > 1) {
@@ -112,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         //Creating a pending intent for sendNotification class.
         Intent intent = new Intent(this, sendNotification.class);
+        intent.putExtra("AlarmName", name);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_IMMUTABLE);
         requestCode++;
         //Generating object of alarmManager using getSystemService method. Here ALARM_SERVICE is used to receive alarm manager with intent at a time.
@@ -120,8 +125,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Log.i("cal time", String.valueOf(millTime));
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 
-        EditText alarmNameET = findViewById(R.id.alarmName);
-        String name = String.valueOf(alarmNameET.getText());
         Alarm newAlarm = new Alarm(pendingIntent, millTime, name);
         alarms.add(newAlarm);
         adapter2.notifyDataSetChanged();
@@ -131,7 +134,53 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Toast.makeText(this, "Alarm has been created.", Toast.LENGTH_LONG).show();
     }
 
-    public void updateAlarm(View view){ }
+    public void updateAlarm(View view){
+        //remove the current pending intent
+        PendingIntent pendingIntent = selectedAlarm.getPendingIntent();
+        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+
+        TimePicker tp = findViewById(R.id.timePicker1);
+        Calendar calendar = Calendar.getInstance();
+        int hr = tp.getHour();
+        int m = tp.getMinute();
+
+        TextView dateET = findViewById(R.id.editTextDate);
+        String[] date = String.valueOf(dateET.getText()).split("-");
+        if (date.length > 1) {
+            String month = date[0];
+            String day = date[1];
+            String year = date[2];
+            calendar.set(Calendar.MONTH, Integer.valueOf(date[0]));
+            calendar.set(Calendar.DAY_OF_MONTH, Integer.valueOf(date[1]));
+            calendar.set(calendar.YEAR, Integer.valueOf(date[2]));
+            Log.i("Month, day, year", month + day + year);
+        }
+
+        Log.i("Hour and minute", hr + ":" + m);
+        calendar.set(Calendar.HOUR_OF_DAY,hr);
+        calendar.set(Calendar.MINUTE,m);
+        Date time = calendar.getTime();
+        Log.i("set cal time", String.valueOf(time));
+
+        EditText alarmNameET = findViewById(R.id.alarmName);
+        String name = String.valueOf(alarmNameET.getText());
+
+        //Creating a pending intent for sendNotification class.
+        Intent intent = new Intent(this, sendNotification.class);
+        pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_IMMUTABLE);
+        requestCode++;
+        //Generating object of alarmManager using getSystemService method. Here ALARM_SERVICE is used to receive alarm manager with intent at a time.
+        long millTime = calendar.getTimeInMillis();
+        Log.i("cal time", String.valueOf(millTime));
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
+        //update the current alarms params
+        selectedAlarm.setPendingIntent(pendingIntent);
+        selectedAlarm.setMilli(millTime);
+        selectedAlarm.setAlarmName(name);
+        adapter2.notifyDataSetChanged();
+    }
 
 
 
@@ -152,10 +201,13 @@ class Alarm{
     }
 
     public PendingIntent getPendingIntent(){ return this.pendingIntent; }
+    public void setPendingIntent(PendingIntent pendingIntent){ this.pendingIntent = pendingIntent; }
 
     public long getMilli(){ return this.milli; }
+    public void setMilli(long milli){ this.milli = milli; }
 
     public String getAlarmName(){ return this.alarmName; }
+    public void setAlarmName(String alarmName){ this.alarmName = alarmName; }
 
     @Override
     public String toString(){

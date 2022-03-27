@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private ArrayList<Alarm> alarms = new ArrayList<Alarm>();
     private ArrayAdapter<Alarm> adapter2;
     private Alarm selectedAlarm;
+    private int requestCode = 0;
 
 
     @Override
@@ -110,9 +111,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         //Creating a pending intent for sendNotification class.
         Intent intent = new Intent(this, sendNotification.class);
-        PendingIntent pendingIntent = null;
-        pendingIntent = PendingIntent.getBroadcast(this, 40, intent, PendingIntent.FLAG_IMMUTABLE);
-
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_IMMUTABLE);
+        requestCode++;
         //Generating object of alarmManager using getSystemService method. Here ALARM_SERVICE is used to receive alarm manager with intent at a time.
         AlarmManager alarmManager=(AlarmManager)getSystemService(ALARM_SERVICE);
         long millTime = calendar.getTimeInMillis();

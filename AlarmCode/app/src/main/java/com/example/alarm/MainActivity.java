@@ -27,7 +27,9 @@ import java.util.Date;
 import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
-    ArrayList<Alarm> alarms = new ArrayList<Alarm>();
+    private ArrayList<Alarm> alarms = new ArrayList<Alarm>();
+    private ArrayAdapter<Alarm> adapter2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,16 +47,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         spinner.setOnItemSelectedListener(this);
 
         Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
-        ArrayAdapter adapter2 = new ArrayAdapter<Alarm>(this, android.R.layout.simple_spinner_item, alarms);
+        adapter2 = new ArrayAdapter<Alarm>(this, android.R.layout.simple_spinner_item, alarms);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-
-
         spinner2.setAdapter(adapter2);
         spinner2.setOnItemSelectedListener(this);
 
     }
-
+    @Override
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
 
@@ -66,11 +65,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Log.i("time selected is", time);
                 break;
             case R.id.spinner2:
-                String alarm = (String) parent.getItemAtPosition(pos);
+                String alarm = parent.getItemAtPosition(pos).toString();
                 Log.i("alarm selected is", alarm);
                 break;
         }
     }
+
 
     public void newAlarm(View view){
         TimePicker tp = findViewById(R.id.timePicker1);
@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         newAlarm.milli = millTime;
         newAlarm.pendingIntent = pendingIntent;
         alarms.add(newAlarm);
+        adapter2.notifyDataSetChanged();
 
         Log.d("===Sensing alarm===", "One time alert alarm has been created. This alarm will send to a broadcast sensing receiver.");
 

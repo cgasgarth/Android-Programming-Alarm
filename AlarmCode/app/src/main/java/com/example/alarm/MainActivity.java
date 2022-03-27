@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             alarmManager.cancel(pendingIntent);
             alarms.remove(selectedAlarm);
             adapter2.notifyDataSetChanged();
+            Toast.makeText(this, "Alarm has been removed.", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -102,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             Log.i("Month, day, year", month + day + year);
         }
 
-        Log.i("Hour and minuite", hr + ":" + m);
+        Log.i("Hour and minute", hr + ":" + m);
         calendar.set(Calendar.HOUR_OF_DAY,hr);
         calendar.set(Calendar.MINUTE,m);
         Date time = calendar.getTime();
@@ -119,16 +120,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Log.i("cal time", String.valueOf(millTime));
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 
-        Alarm newAlarm = new Alarm();
-        newAlarm.milli = millTime;
-        newAlarm.pendingIntent = pendingIntent;
+        EditText alarmNameET = findViewById(R.id.alarmName);
+        String name = String.valueOf(alarmNameET.getText());
+        Alarm newAlarm = new Alarm(pendingIntent, millTime, name);
         alarms.add(newAlarm);
         adapter2.notifyDataSetChanged();
 
         Log.d("===Sensing alarm===", "One time alert alarm has been created. This alarm will send to a broadcast sensing receiver.");
 
-        Toast.makeText(this, "Sensing alert alarm has been created. This alarm will send to a broadcast start sensing receiver.", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Alarm has been created.", Toast.LENGTH_LONG).show();
     }
+
+    public void updateAlarm(View view){ }
+
+
 
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
@@ -136,19 +141,29 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 }
 
 class Alarm{
-    PendingIntent pendingIntent;
-    long milli;
+    private PendingIntent pendingIntent;
+    private long milli;
+    private String alarmName;
 
-    PendingIntent getPendingIntent(){ return this.pendingIntent; }
+    public Alarm(PendingIntent pendingIntent, long milli, String alarmName){
+        this.pendingIntent = pendingIntent;
+        this.milli = milli;
+        this.alarmName = alarmName;
+    }
 
-    long getMilli(){ return this.milli;}
+    public PendingIntent getPendingIntent(){ return this.pendingIntent; }
+
+    public long getMilli(){ return this.milli; }
+
+    public String getAlarmName(){ return this.alarmName; }
 
     @Override
     public String toString(){
         Date date = new Date(this.getMilli());
-        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy 'at' HH:mm:ss z");
+        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy 'at' HH:mm:ss");
         formatter.setTimeZone(TimeZone.getTimeZone("EDT"));
         String dateFormatted = formatter.format(date);
+        dateFormatted = dateFormatted + " " + this.getAlarmName();
         return dateFormatted;
 
     }

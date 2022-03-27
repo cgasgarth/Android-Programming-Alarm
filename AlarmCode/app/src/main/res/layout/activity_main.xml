@@ -29,7 +29,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:spinnerMode="dropdown" />
+        android:minHeight="48dp"
+        android:spinnerMode="dropdown"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,20 +44,24 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="newAlarm"
-            android:text="Set Alarm" />
+            android:text="Set Alarm"
+            style="?android:attr/buttonBarButtonStyle" />
 
         <Button
             android:id="@+id/removeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Remove Alarm" />
+            android:text="Remove Alarm"
+            style="?android:attr/buttonBarButtonStyle" />
     </LinearLayout>
 
     <Spinner
         android:id="@+id/spinner2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:spinnerMode="dialog" />
+        android:minHeight="48dp"
+        android:spinnerMode="dialog"
+        tools:ignore="SpeakableTextPresentCheck" />
 
 </LinearLayout>

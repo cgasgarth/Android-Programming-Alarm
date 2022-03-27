@@ -44,12 +44,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
 
-        Spinner spinner2 = findViewById(R.id.spinner2);
-        ArrayAdapter adapter2 = new ArrayAdapter(this, android.R.layout.simple_spinner_item, alarms);
+        Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
+        ArrayAdapter adapter2 = new ArrayAdapter<Alarm>(this, android.R.layout.simple_spinner_item, alarms);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+
+
         spinner2.setAdapter(adapter2);
-        spinner.setOnItemSelectedListener(this);
+        spinner2.setOnItemSelectedListener(this);
 
     }
 
@@ -58,8 +60,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // An item was selected. You can retrieve the selected item using
         // parent.getItemAtPosition(pos)
-         String item = (String) parent.getItemAtPosition(pos);
-         Log.i("item selected is", item);
+        switch (parent.getId()){
+            case R.id.spinner:
+                String time = (String) parent.getItemAtPosition(pos);
+                Log.i("time selected is", time);
+                break;
+            case R.id.spinner2:
+                String alarm = (String) parent.getItemAtPosition(pos);
+                Log.i("alarm selected is", alarm);
+                break;
+        }
     }
 
     public void newAlarm(View view){

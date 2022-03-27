@@ -49,11 +49,12 @@
 
         <Button
             android:id="@+id/removeButton"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Remove Alarm"
-            style="?android:attr/buttonBarButtonStyle" />
+            android:onClick="removeAlarm"
+            android:text="Remove Alarm" />
     </LinearLayout>
 
     <Spinner

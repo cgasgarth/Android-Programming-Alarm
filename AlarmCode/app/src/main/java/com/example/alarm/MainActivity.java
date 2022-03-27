@@ -29,6 +29,7 @@ import java.util.TimeZone;
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private ArrayList<Alarm> alarms = new ArrayList<Alarm>();
     private ArrayAdapter<Alarm> adapter2;
+    private Alarm selectedAlarm;
 
 
     @Override
@@ -65,12 +66,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Log.i("time selected is", time);
                 break;
             case R.id.spinner2:
-                String alarm = parent.getItemAtPosition(pos).toString();
-                Log.i("alarm selected is", alarm);
+                Alarm alarm = (Alarm) parent.getItemAtPosition(pos);
+                selectedAlarm = alarm;
+                Log.i("alarm selected is", alarm.toString());
                 break;
         }
     }
 
+    public void removeAlarm(View view){
+        if (selectedAlarm != null){
+            PendingIntent pendingIntent = selectedAlarm.getPendingIntent();
+            AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+            alarmManager.cancel(pendingIntent);
+            alarms.remove(selectedAlarm);
+            adapter2.notifyDataSetChanged();
+        }
+    }
 
     public void newAlarm(View view){
         TimePicker tp = findViewById(R.id.timePicker1);

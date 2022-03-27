@@ -19,9 +19,12 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.lang.reflect.Array;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     ArrayList<Alarm> alarms = new ArrayList<Alarm>();
@@ -40,6 +43,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
+
+        Spinner spinner2 = findViewById(R.id.spinner2);
+        ArrayAdapter adapter2 = new ArrayAdapter(this, android.R.layout.simple_spinner_item, alarms);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner2.setAdapter(adapter2);
+
     }
 
     public void onItemSelected(AdapterView<?> parent, View view,
@@ -108,4 +118,14 @@ class Alarm{
 
     PendingIntent getPendingIntent(){ return this.pendingIntent; }
     long getMilli(){ return this.milli;}
+
+    @Override
+    public String toString(){
+        Date date = new Date(this.getMilli());
+        DateFormat formatter = new SimpleDateFormat("yyyy.MM.dd 'at' HH:mm:ss z");
+        formatter.setTimeZone(TimeZone.getTimeZone("EDT"));
+        String dateFormatted = formatter.format(date);
+        return dateFormatted;
+
+    }
 }

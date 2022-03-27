@@ -93,7 +93,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         EditText alarmNameET = findViewById(R.id.alarmName);
         String name = String.valueOf(alarmNameET.getText());
-        if (name == ""){ name = "alert"; }
 
         TextView dateET = findViewById(R.id.editTextDate);
         String[] date = String.valueOf(dateET.getText()).split("-");
@@ -117,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //Creating a pending intent for sendNotification class.
         Intent intent = new Intent(this, sendNotification.class);
         intent.putExtra("AlarmName", name);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_MUTABLE);
         requestCode++;
         //Generating object of alarmManager using getSystemService method. Here ALARM_SERVICE is used to receive alarm manager with intent at a time.
         AlarmManager alarmManager=(AlarmManager)getSystemService(ALARM_SERVICE);
@@ -145,6 +144,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         int hr = tp.getHour();
         int m = tp.getMinute();
 
+        EditText alarmNameET = findViewById(R.id.alarmName);
+        String name = String.valueOf(alarmNameET.getText());
+
+
         TextView dateET = findViewById(R.id.editTextDate);
         String[] date = String.valueOf(dateET.getText()).split("-");
         if (date.length > 1) {
@@ -163,12 +166,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Date time = calendar.getTime();
         Log.i("set cal time", String.valueOf(time));
 
-        EditText alarmNameET = findViewById(R.id.alarmName);
-        String name = String.valueOf(alarmNameET.getText());
-
         //Creating a pending intent for sendNotification class.
         Intent intent = new Intent(this, sendNotification.class);
-        pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_IMMUTABLE);
+        pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_MUTABLE);
+        intent.putExtra("AlarmName", name);
         requestCode++;
         //Generating object of alarmManager using getSystemService method. Here ALARM_SERVICE is used to receive alarm manager with intent at a time.
         long millTime = calendar.getTimeInMillis();
@@ -180,6 +181,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         selectedAlarm.setMilli(millTime);
         selectedAlarm.setAlarmName(name);
         adapter2.notifyDataSetChanged();
+        Toast.makeText(this, "Alarm has been updated.", Toast.LENGTH_LONG).show();
+
     }
 
 

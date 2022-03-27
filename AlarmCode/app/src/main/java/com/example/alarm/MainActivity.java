@@ -140,12 +140,13 @@ class Alarm{
     long milli;
 
     PendingIntent getPendingIntent(){ return this.pendingIntent; }
+
     long getMilli(){ return this.milli;}
 
     @Override
     public String toString(){
         Date date = new Date(this.getMilli());
-        DateFormat formatter = new SimpleDateFormat("yyyy.MM.dd 'at' HH:mm:ss z");
+        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy 'at' HH:mm:ss z");
         formatter.setTimeZone(TimeZone.getTimeZone("EDT"));
         String dateFormatted = formatter.format(date);
         return dateFormatted;

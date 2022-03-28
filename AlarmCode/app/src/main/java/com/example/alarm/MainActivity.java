@@ -128,8 +128,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         alarms.add(newAlarm);
         adapter2.notifyDataSetChanged();
 
-        Log.d("===Sensing alarm===", "One time alert alarm has been created. This alarm will send to a broadcast sensing receiver.");
-
         Toast.makeText(this, "Alarm has been created.", Toast.LENGTH_LONG).show();
     }
 
@@ -215,8 +213,8 @@ class Alarm{
     @Override
     public String toString(){
         Date date = new Date(this.getMilli());
-        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy 'at' HH:mm:ss");
-        formatter.setTimeZone(TimeZone.getTimeZone("EDT"));
+        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy 'at' hh:mm:ss");
+        //formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         String dateFormatted = formatter.format(date);
         dateFormatted = dateFormatted + " " + this.getAlarmName();
         return dateFormatted;

@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private ArrayList<Alarm> alarms = new ArrayList<Alarm>();
@@ -116,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //Creating a pending intent for sendNotification class.
         Intent intent = new Intent(this, sendNotification.class);
         intent.putExtra("AlarmName", name);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_MUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_ONE_SHOT);
         requestCode++;
         //Generating object of alarmManager using getSystemService method. Here ALARM_SERVICE is used to receive alarm manager with intent at a time.
         AlarmManager alarmManager=(AlarmManager)getSystemService(ALARM_SERVICE);
@@ -166,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         //Creating a pending intent for sendNotification class.
         Intent intent = new Intent(this, sendNotification.class);
-        pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_MUTABLE);
+        pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_ONE_SHOT);
         intent.putExtra("AlarmName", name);
         requestCode++;
         //Generating object of alarmManager using getSystemService method. Here ALARM_SERVICE is used to receive alarm manager with intent at a time.
@@ -204,19 +205,24 @@ class Alarm{
     public PendingIntent getPendingIntent(){ return this.pendingIntent; }
     public void setPendingIntent(PendingIntent pendingIntent){ this.pendingIntent = pendingIntent; }
 
-    public long getMilli(){ return this.milli; }
+    public long getMilli(){
+        return this.milli;
+    }
     public void setMilli(long milli){ this.milli = milli; }
 
     public String getAlarmName(){ return this.alarmName; }
     public void setAlarmName(String alarmName){ this.alarmName = alarmName; }
-
     @Override
     public String toString(){
-        Date date = new Date(this.getMilli());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(this.getMilli());
+        calendar.add(Calendar.MONTH, -1);
+        long milliTime = calendar.getTimeInMillis();
+        Date date = new Date(milliTime);
         DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy 'at' hh:mm:ss");
         //formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String dateFormatted = formatter.format(date);
-        dateFormatted = dateFormatted + " " + this.getAlarmName();
+        String dateFormatted = formatter.format(date) + " " + this.getAlarmName();
+
         return dateFormatted;
 
     }
